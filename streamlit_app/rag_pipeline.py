@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from rag.embed import embedder, reranker
+from rag.embed import get_embedder, get_reranker
 from rag.generate import generate_answer
 from rag.retrieve import retrieve
 from rag.store import create_faiss_index
@@ -16,6 +16,7 @@ def initialize_rag(pdf_path: str):
     if not docs:
         raise ValueError("Unable to create text chunks from the selected PDF.")
 
+    embedder = get_embedder()
     doc_embeddings = embedder.encode(docs)
     index = create_faiss_index(doc_embeddings)
     return docs, index
@@ -25,6 +26,8 @@ def answer_query(query: str, docs, index):
     if not query or not query.strip():
         raise ValueError("Question cannot be empty.")
 
+    embedder = get_embedder()
+    reranker = get_reranker()
     best_docs = retrieve(
         query=query.strip(),
         embedder=embedder,

@@ -12,7 +12,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
-from rag.embed import embedder, reranker
+from rag.embed import get_embedder, get_reranker
 from streamlit_app.rag_pipeline import answer_query, initialize_rag
 from streamlit_app.ui_helpers import (
     apply_app_theme,
@@ -51,7 +51,7 @@ def cached_initialize_rag(pdf_path: str):
 
 @st.cache_resource(show_spinner=False)
 def cached_models():
-    return embedder, reranker
+    return get_embedder(), get_reranker()
 
 
 # ===============================
@@ -164,6 +164,10 @@ if active_pdf and active_pdf != st.session_state.current_pdf:
 # ===============================
 if not active_pdf:
     st.warning("Please upload or select a PDF.")
+    st.stop()
+
+if st.session_state.rag_data is None:
+    st.error("Document processing failed. Please re-upload the PDF and try again.")
     st.stop()
 
 docs, index = st.session_state.rag_data

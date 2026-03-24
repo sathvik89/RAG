@@ -1,4 +1,4 @@
-from rag.embed import embedder, reranker
+from rag.embed import get_embedder, get_reranker
 from rag.utils import extract_text_from_pdf, chunk_text
 from rag.store import create_faiss_index
 from rag.retrieve import retrieve
@@ -16,6 +16,7 @@ def setup_rag():
     print(f"Chunks created: {len(docs)}")
     print("Generating embeddings...")
 
+    embedder = get_embedder()
     doc_embeddings = embedder.encode(docs)
     index = create_faiss_index(doc_embeddings)
 
@@ -26,6 +27,8 @@ def setup_rag():
 
 def chat_loop(docs, index):
     print("Enter your question (type 'exit' to quit)\n")
+    embedder = get_embedder()
+    reranker = get_reranker()
     while True:
         query = input("You: ").strip()
 
