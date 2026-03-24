@@ -50,7 +50,7 @@ pip install -r requirements.txt
 ```
 
 ### 4. Add your PDF
-Place your document in `data/` folder
+Place your document in `data/` folder and change the path . or deeplearning-pdf is already there you canu use that .
 
 ### 5. Setup environment
 Create `.env` file:
